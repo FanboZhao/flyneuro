@@ -3,9 +3,9 @@
 // One independent 45,669-node state per eye; both states share 1,513,231 weights.
 const N_COLUMNS = 721
 const DT_MS = 20
-const MODEL_URL = "/data/flyvis-flow-0000-000.bin"
-const META_URL = "/data/flyvis-flow-0000-000.json"
-const CNS_MAP_URL = "/data/flyvis_map.json"
+const MODEL_URL = new URL("../data/flyvis-flow-0000-000.bin", self.location.href).href
+const META_URL = new URL("../data/flyvis-flow-0000-000.json", self.location.href).href
+const CNS_MAP_URL = new URL("../data/flyvis_map.json", self.location.href).href
 const TYPES = ["R1–6", "L1", "L2", "Mi1", "Tm3", "T4a", "T4b", "T5a"]
 const DIRECTIONS = ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
 

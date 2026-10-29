@@ -1,5 +1,5 @@
 {
-  "name": "site-creator-vinext-starter",
+  "name": "flyneuro",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.19.0",
@@ -7,6 +7,9 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "dev:static": "vite --config vite.static.config.ts",
+    "build:static": "vite build --config vite.static.config.ts",
+    "preview:static": "vite preview --config vite.static.config.ts",
     "install:ci": "pnpm install --frozen-lockfile --prefer-offline",
     "dev": "node scripts/run-framework.mjs dev",
     "build": "node scripts/run-framework.mjs build",

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { decodeFlyBrainNeurons } from "@/lib/fly-brain-codec"
+import { assetUrl } from "@/lib/asset-url"
 
 type Behavior = "forage" | "patrol" | "track"
 type ControllerMode = "strict" | "embodied"
@@ -300,9 +301,9 @@ function WorldCanvas({
     const eyePixels = [new Uint8Array(eyeResolution * eyeResolution * 4), new Uint8Array(eyeResolution * eyeResolution * 4)]
     const eyeLuminance = [new Float32Array(HEX_COORDS.length), new Float32Array(HEX_COORDS.length)]
     const eyeAdaptMean = [Number.NaN, Number.NaN]
-    const worker = new Worker("/workers/flyvis-worker.js")
-    const cnsWorker = new Worker("/workers/cns-worker.js", { type: "module" })
-    const odorWorker = new Worker("/workers/odor-worker.js")
+    const worker = new Worker(assetUrl("workers/flyvis-worker.js"))
+    const cnsWorker = new Worker(assetUrl("workers/cns-worker.js"), { type: "module" })
+    const odorWorker = new Worker(assetUrl("workers/odor-worker.js"))
     let visionReady = false
     let cnsReady = false
     let motor: CnsMotor | null = null
@@ -495,7 +496,7 @@ function WorldCanvas({
     const articulated = new Map<string, { object: THREE.Object3D; base: THREE.Quaternion }>()
     let disposed = false
     const loader = new GLTFLoader()
-    loader.load("/models/flybody-fly.glb", (gltf) => {
+    loader.load(assetUrl("models/flybody-fly.glb"), (gltf) => {
       if (disposed) return
       const model = gltf.scene
       model.name = "FlyBody-official-LOD"
@@ -1261,7 +1262,7 @@ function WholeBrainCanvas({ running, active, metrics }: { running: boolean; acti
     observer.observe(holder)
     resize()
 
-    void fetch("/data/fly-brain-neurons.flyn")
+    void fetch(assetUrl("data/fly-brain-neurons.flyn"))
       .then((response) => {
         if (!response.ok) throw new Error(`neuron table ${response.status}`)
         return response.arrayBuffer()
@@ -1528,7 +1529,7 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand-lockup"><div className="brand-mark" aria-hidden="true"><Eye size={19} /></div><div className="brand-title">FLYVIS <span>OBSERVATORY</span></div></div>
+        <a className="brand-lockup" href="https://zhaofanbo.com/" title="返回赵凡博的个人网站"><div className="brand-mark" aria-hidden="true"><Eye size={19} /></div><div className="brand-title">FLY<span>NEURO</span></div></a>
         <div className="topbar-status" aria-label="仿真状态"><span className={`live-dot ${running && cnsMetrics.status === "ready" ? "is-live" : ""}`} /><strong>{cnsMetrics.status === "error" ? "CNS 异常" : cnsMetrics.status !== "ready" ? "CNS 加载中" : running ? "自动飞行" : "已暂停"}</strong></div>
         <div className="topbar-actions"><Button variant="ghost" size="icon-sm" onClick={reset} aria-label="重置仿真"><RotateCcw /></Button><Button variant="ghost" size="icon-sm" onClick={enterFullscreen} aria-label="全屏"><Maximize2 /></Button></div>
       </header>

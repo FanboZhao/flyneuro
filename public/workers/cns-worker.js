@@ -6,12 +6,12 @@ import { LIFNetwork } from "./cns/lif.js"
 import { MotorReadout } from "./cns/motor-readout.js"
 
 const URLS = {
-  graph: "/data/graph.flyg",
-  neurons: "/data/fly-brain-neurons.flyn",
-  meta: "/data/meta.json",
-  size: "/data/neuron_size.bin",
-  sign: "/data/ntsign.bin",
-  params: "/data/brain_params.json",
+  graph: new URL("../data/graph.flyg", self.location.href).href,
+  neurons: new URL("../data/fly-brain-neurons.flyn", self.location.href).href,
+  meta: new URL("../data/meta.json", self.location.href).href,
+  size: new URL("../data/neuron_size.bin", self.location.href).href,
+  sign: new URL("../data/ntsign.bin", self.location.href).href,
+  params: new URL("../data/brain_params.json", self.location.href).href,
 }
 
 let net = null
@@ -218,7 +218,7 @@ async function init() {
     const mapped = new Set()
     // Visual neurons are driven externally by the separate FlyVis optic-lobe worker.
     // Only its currently active pairs are sent at runtime; the full pair list is needed for the mask.
-    const map = await read("/data/flyvis_map.json", true)
+    const map = await read(new URL("../data/flyvis_map.json", self.location.href).href, true)
     for (const side of ["L", "R"]) for (const pair of map.eyes[side].pairs) mapped.add(pair[0])
     postMessage({ type: "status", message: "正在建立全脑 LIF 状态…" })
     const { inScale, sensoryMask } = makeScales(neurons, meta, size, params, mapped)

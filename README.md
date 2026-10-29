@@ -1,8 +1,8 @@
-# FlyVis Observatory
+# FlyNeuro
 
 浏览器中的果蝇具身视觉与寻香仿真：在树林中观察 FlyBody 果蝇起飞、避障、接近花朵与降落，同时查看复眼、FlyVis 和全 CNS 神经活动。
 
-**在线演示：[flyvis-observatory.zhaofanbo618.chatgpt.site](https://flyvis-observatory.zhaofanbo618.chatgpt.site/)**
+**在线演示：[zhaofanbo.com/flyneuro](https://zhaofanbo.com/flyneuro/)** · **源码：[FanboZhao/flyneuro](https://github.com/FanboZhao/flyneuro)**
 
 ## 当前功能
 
@@ -26,10 +26,10 @@ FlyBody 在本项目中提供视觉身体网格，身体位移、碰撞和关节
 ```sh
 corepack enable
 pnpm install --frozen-lockfile
-pnpm dev
+pnpm dev:static
 ```
 
-打开终端输出的本地地址，默认是 `http://localhost:5173/`。模型权重、连接图和身体模型都已包含在 `public/` 中；不需要 API 密钥。首次加载会读取数十 MB 的神经数据，建议使用桌面浏览器并启用 WebGL。
+打开终端输出的本地地址，默认是 `http://localhost:5173/flyneuro/`。模型权重、连接图和身体模型都已包含在 `public/` 中；不需要 API 密钥。首次加载会读取数十 MB 的神经数据，建议使用桌面浏览器并启用 WebGL。
 
 ```sh
 # 类型检查
@@ -38,14 +38,18 @@ pnpm exec tsc --noEmit
 # 气味场回归检查
 node scripts/test-odor-field.mjs
 
-# 构建 Cloudflare Workers 兼容产物
-pnpm build
+# 构建个人网站下的静态演示
+pnpm build:static
 
 # 在本地预览构建产物
-pnpm start
+pnpm preview:static
 ```
 
-生产演示托管于 Sites；仅把源码推送到 GitHub 不会自动更新演示。重新部署与运行环境说明见 [Sites runtime reference](docs/SITES_RUNTIME.md)。GitHub 副本的 `.openai/hosting.json` 仅保留本地构建配置；在自己的 Sites 项目部署时，需要由 Sites 注册工具写入你自己的 `project_id`。
+生产演示通过本仓库的 `gh-pages` 分支发布，挂载在个人网站的 `/flyneuro/` 下。`dist-static/` 中的文件就是发布产物；更新演示时，需要重新构建并同步到 `gh-pages`。`main` 保存完整源码和模型，推送到 `main` 不会自动更新演示。
+
+`vite.static.config.ts` 设置部署子目录；页面和 Worker 都使用相对于应用目录的资源路径。若部署到其他路径，需要修改该配置与 `index.html` 中的 canonical 地址。
+
+原来的 Sites 运行方式仍保留：`pnpm dev` / `pnpm build` / `pnpm start`。相关运行环境说明见 [Sites runtime reference](docs/SITES_RUNTIME.md)。`.openai/hosting.json` 仅保留本地构建配置；部署自己的 Sites 项目时，需要注册自己的 `project_id`。
 
 ## 源码位置
 
@@ -58,9 +62,10 @@ pnpm start
 | `public/data/` | 预训练权重、连接图及神经元注释 |
 | `public/models/flybody-fly.glb` | 优化后的 FlyBody 视觉模型 |
 | `scripts/build-flybody-model.mjs` | 从官方模型资源生成浏览器模型 |
+| `static/main.tsx`、`vite.static.config.ts` | GitHub Pages 静态入口和子路径构建 |
 
 ## 来源与许可
 
 本项目参考并使用 [TuragaLab/flyvis](https://github.com/TuragaLab/flyvis)、[TuragaLab/flybody](https://github.com/TuragaLab/flybody) 和 [Lulzx/fly-brain](https://github.com/Lulzx/fly-brain)。第三方资源的上游提交、修改说明与许可见 [THIRD_PARTY_NOTICES](public/THIRD_PARTY_NOTICES.md) 和 [public/licenses](public/licenses)。
 
-本次 GitHub 导出对应在线站点第 26 版，源代码提交为 `2e60842cb71eea3bf949ba511f310baeea892351`。运行代码和模型数据保持该版本，另外补充了本说明并移除了本地生成文件和原站点的托管标识。
+本项目最初以 FlyVis Observatory 发布，对应原 Sites 第 26 版（`2e60842cb71eea3bf949ba511f310baeea892351`）。现更名为 FlyNeuro，并增加个人网站子目录部署；神经模型和仿真机制沿用该版本。
