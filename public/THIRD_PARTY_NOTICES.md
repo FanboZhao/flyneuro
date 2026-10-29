@@ -9,7 +9,7 @@ This site includes a browser-optimized derivative of the visual meshes from
 FlyBody was developed through a collaboration between Google DeepMind and the
 HHMI Janelia Research Campus. The upstream project is licensed under the Apache
 License, Version 2.0. A copy is distributed at
-`/licenses/flybody-APACHE-2.0.txt`.
+`licenses/flybody-APACHE-2.0.txt` (relative to the application directory).
 
 Changes made for this site: the official OBJ visual meshes were transformed
 according to the upstream MuJoCo `fruitfly.xml` hierarchy, simplified with a
@@ -26,7 +26,7 @@ calibrated parameter file, and JavaScript LIF/codec modules from
 commit `ba0b4f815c00e81a2ef1f36165df2b1891e5e39c`.
 
 The upstream project is licensed under the MIT License. A copy is distributed
-at `/licenses/fly-brain-MIT.txt`.
+at `licenses/fly-brain-MIT.txt` (relative to the application directory).
 
 The soma coordinates and graph weights are upstream anatomical data. The CNS
 worker computes LIF spikes from those weights and receives visual drive from
@@ -52,7 +52,7 @@ This site includes the `flow/0000/000` FlyVis model export (`45,669` nodes and
 commit `ba0b4f815c00e81a2ef1f36165df2b1891e5e39c`. The model originates
 from [`TuragaLab/flyvis`](https://github.com/TuragaLab/flyvis), Lappalainen et al.
 (2024). The export and browser rate-network step follow the upstream MIT
-licensed implementation; see `/licenses/fly-brain-MIT.txt`.
+licensed implementation; see `licenses/fly-brain-MIT.txt` in the application directory.
 
 The site renders two head-mounted perspective images from its Three.js scene,
 samples 721 luminance columns per eye, and advances two independent model
