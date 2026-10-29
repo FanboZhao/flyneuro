@@ -1,0 +1,5 @@
+# Neural weights, compressed connectomes and meshes must stay byte-identical.
+*.bin binary
+*.flyg binary
+*.flyn binary
+*.glb binary
