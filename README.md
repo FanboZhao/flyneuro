@@ -47,6 +47,8 @@ pnpm preview:static
 
 生产演示通过本仓库的 `gh-pages` 分支发布，挂载在个人网站的 `/flyneuro/` 下。`dist-static/` 中的文件就是发布产物；更新演示时，需要重新构建并同步到 `gh-pages`。`main` 保存完整源码和模型，推送到 `main` 不会自动更新演示。
 
+完整发布步骤与个人主页接入说明见 [DEPLOYMENT.md](docs/DEPLOYMENT.md)。GitHub Actions 会对 `main` 的推送和拉取请求执行类型检查、气味场回归检查和静态构建。
+
 `vite.static.config.ts` 设置部署子目录；页面和 Worker 都使用相对于应用目录的资源路径。若部署到其他路径，需要修改该配置与 `index.html` 中的 canonical 地址。
 
 原来的 Sites 运行方式仍保留：`pnpm dev` / `pnpm build` / `pnpm start`。相关运行环境说明见 [Sites runtime reference](docs/SITES_RUNTIME.md)。`.openai/hosting.json` 仅保留本地构建配置；部署自己的 Sites 项目时，需要注册自己的 `project_id`。
