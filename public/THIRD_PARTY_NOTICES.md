@@ -60,3 +60,9 @@ states in a Web Worker. Their mapped visual activity enters the whole-CNS LIF
 worker. T4/T5 direction-channel differences remain visual diagnostics and do
 not directly drive the body. The on-screen CNS link switch disconnects motor
 readout from the display body while both neural networks keep running.
+
+## UI components
+
+The button, slider and tabs in `src/components/ui/` derive from shadcn/ui
+(MIT License, copyright shadcn). A copy of the license is distributed at
+`licenses/shadcn-MIT.txt` relative to the application directory.

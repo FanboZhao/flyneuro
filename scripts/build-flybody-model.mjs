@@ -8,7 +8,9 @@ import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js"
 
 const [, , sourceDirectory, outputFile] = process.argv
 if (!sourceDirectory || !outputFile) {
-  throw new Error("Usage: node scripts/build-flybody-model.mjs <flybody assets directory> <output.glb>")
+  throw new Error(
+    "Usage: node scripts/build-flybody-model.mjs <flybody assets directory> <output.glb>",
+  )
 }
 
 if (typeof globalThis.FileReader === "undefined") {
@@ -18,7 +20,8 @@ if (typeof globalThis.FileReader === "undefined") {
     onerror = null
 
     readAsArrayBuffer(blob) {
-      blob.arrayBuffer()
+      blob
+        .arrayBuffer()
         .then((buffer) => {
           this.result = buffer
           this.onloadend?.({ target: this })
@@ -29,10 +32,10 @@ if (typeof globalThis.FileReader === "undefined") {
 }
 
 const xml = await readFile(path.join(sourceDirectory, "fruitfly.xml"), "utf8")
-const attributes = (tag) => Object.fromEntries(
-  [...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map((match) => [match[1], match[2]]),
-)
-const vector = (value, fallback = [0, 0, 0]) => value ? value.trim().split(/\s+/).map(Number) : fallback
+const attributes = (tag) =>
+  Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map((match) => [match[1], match[2]]))
+const vector = (value, fallback = [0, 0, 0]) =>
+  value ? value.trim().split(/\s+/).map(Number) : fallback
 const quaternion = (value) => {
   const [w, x, y, z] = vector(value, [1, 0, 0, 0])
   return new THREE.Quaternion(x, y, z, w).normalize()
@@ -53,7 +56,8 @@ for (const match of xml.matchAll(/<material\b[^>]*\/>/g)) {
 }
 
 const createMaterial = (name = "body") => {
-  const value = materialDefinitions.get(name) ?? materialDefinitions.get("body") ?? { r: 0.674, g: 0.35, b: 0.143, a: 1 }
+  const value = materialDefinitions.get(name) ??
+    materialDefinitions.get("body") ?? { r: 0.674, g: 0.35, b: 0.143, a: 1 }
   const transparent = value.a < 0.999
   return new THREE.MeshPhysicalMaterial({
     name: `flybody-${name}`,
@@ -87,7 +91,8 @@ function vertexBudget(file) {
 
 function clusterGeometry(source, budget) {
   const prepared = source.clone()
-  for (const key of Object.keys(prepared.attributes)) if (key !== "position") prepared.deleteAttribute(key)
+  for (const key of Object.keys(prepared.attributes))
+    if (key !== "position") prepared.deleteAttribute(key)
   let geometry = mergeVertices(prepared, 1e-5)
   const count = geometry.attributes.position.count
   if (count <= budget) {
@@ -246,10 +251,12 @@ const glb = await exporter.parseAsync(root, {
 })
 await mkdir(path.dirname(outputFile), { recursive: true })
 await writeFile(outputFile, Buffer.from(glb))
-console.log(JSON.stringify({
-  outputFile,
-  vertexCount,
-  triangleCount: Math.round(triangleCount),
-  meshes: meshCache.size,
-  bounds: boundsSize.toArray().map((value) => Number(value.toFixed(4))),
-}))
+console.log(
+  JSON.stringify({
+    outputFile,
+    vertexCount,
+    triangleCount: Math.round(triangleCount),
+    meshes: meshCache.size,
+    bounds: boundsSize.toArray().map((value) => Number(value.toFixed(4))),
+  }),
+)

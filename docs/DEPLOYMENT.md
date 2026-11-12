@@ -5,7 +5,7 @@
 ## 发布结构
 
 - `main`：可重新构建的源码、模型、锁文件和第三方许可。
-- `gh-pages`：`pnpm build:static` 生成的静态文件。
+- `gh-pages`：`pnpm build` 生成的静态文件。
 - `FanboZhao/FanboZhao.github.io`：个人主页，配置自定义域名 `zhaofanbo.com`，并链接到 `/flyneuro/`。
 
 使用独立项目仓库可以让演示位于个人域名的子路径，而不把数十 MB 模型复制到个人主页仓库。
@@ -18,10 +18,10 @@ GitHub Pages 应配置为从 `gh-pages` 分支根目录发布。`main` 的持续
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm exec tsc --noEmit
-node scripts/test-odor-field.mjs
-pnpm build:static
-pnpm preview:static
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm preview
 ```
 
 访问预览地址的 `/flyneuro/`，等待神经数据加载，检查场景、复眼和 CNS 状态，以及暂停、继续、重置操作。需要支持 WebGL 的桌面浏览器。
@@ -47,6 +47,6 @@ git -C ../publishing/gh-pages push origin gh-pages
 
 ## 子路径与资源
 
-`vite.static.config.ts` 的 `base` 为 `/flyneuro/`。Worker、模型和许可链接相对于应用目录解析。迁移路径时同步修改 Vite 的 base、`index.html` 的 canonical 和个人主页入口。
+`vite.config.ts` 的 `base` 为 `/flyneuro/`。Worker、模型和许可链接相对于应用目录解析。迁移路径时同步修改 Vite 的 base、`index.html` 的 canonical 和个人主页入口。
 
 不要上传 `node_modules/`、`.env*`、缓存或原始 Sites 项目。保留 `public/licenses/`、`THIRD_PARTY_NOTICES.md` 和二进制模型文件；它们是运行和来源说明的一部分。
